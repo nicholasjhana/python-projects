@@ -1,4 +1,5 @@
 from argparse import ArgumentParser, Action
+import time
 
 class DriverAction(Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -12,9 +13,10 @@ def create_parser():
             """)
 
     parser.add_argument("url", help='url of the databse to backup')
-    parser.add_argument("--driver",
+    parser.add_argument("--driver", '-d',
             help="how & where to store backup",
             nargs=2,
+            metavar=('DRIVER', 'DESTINATION'),
             action=DriverAction,
             required=True)
 
@@ -27,13 +29,18 @@ def main():
 
     args = create_parser().parse_args()
 
-    dump = pgdump.dump(args.url)
+    dump = pg_dump.dump(args.url)
 
     if args.driver == 's3':
         client = boto3.client('s3')
-        storage.s3(client, dump.stdout, args.destination, 'example.sql')
-    else:
-        outfile = outfile(args.destination, 'wb')
-        storage.local(dump.stdout, outfile)
 
+        timestamp = time.strftime('%Y-%m-%dT%H:%M', time.localtime())
+        file_name = pg_dump.dump_file_name(args.url, timestamp)
+        print(f"Backing databse up to {args.destination} in S3 as {file_name}")
+
+        storage.s3(client, dump.stdout, args.destination, file_name)
+    else:
+        outfile = open(args.destination, 'wb')
+        print(f'Backing database up locally to {outfile.name}')
+        storage.local(dump.stdout, outfile)
 

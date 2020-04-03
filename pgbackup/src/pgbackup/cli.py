@@ -19,3 +19,21 @@ def create_parser():
             required=True)
 
     return parser
+
+
+def main():
+    import boto3
+    from pgbackup import pg_dump, storage
+
+    args = create_parser().parse_args()
+
+    dump = pgdump.dump(args.url)
+
+    if args.driver == 's3':
+        client = boto3.client('s3')
+        storage.s3(client, dump.stdout, args.destination, 'example.sql')
+    else:
+        outfile = outfile(args.destination, 'wb')
+        storage.local(dump.stdout, outfile)
+
+

@@ -14,7 +14,7 @@ setup(
         name='pgbackup',
         version='0.1.0',
         author='Nicholas Jhana',
-        author_email='nicholas@nicholasjhana.com,
+        author_email='nicholas@nicholasjhana.com',
         descrption='A utility for backing up PostgreSQL databases.',
         long_descrption=long_descrption,
 
@@ -25,5 +25,18 @@ setup(
         url='https://github.com/nicholasjhana/python-projects/pgbackup',
 
         # find the packages that make up this project.
-        packages=find_packages('src')
+        packages=find_packages('src'),
+
+        #need to map to a nested directory
+        package_dir={"": "src"},
+
+        install_requires=['boto3'],
+
+        #maps the console script to the script. calling cli module and the function inside main.
+        entry_points= {
+            'console_scripts':[
+                'pgbackup=pgbackup.cli:main'
+                ]
+            }
 )
+

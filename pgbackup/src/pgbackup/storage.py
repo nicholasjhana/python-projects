@@ -9,3 +9,11 @@ def local(infile, outfile):
     outfile.close()
     infile.close()
 
+def s3(client, infile, bucket, name):
+    """
+    Uploads an infile to S3. Will accept any client object that uses an upload_fileobj method.
+
+    upload_fileobj accepts bytes objects
+    """
+
+    client.upload_fileobj(infile, bucket, name)

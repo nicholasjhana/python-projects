@@ -10,9 +10,9 @@ Contains:
 from argparse import ArgumentParser
 
 def create_parser():
-    parser = ArgumentParser(prog='echo')
+    parser = ArgumentParser(prog='clt', description='A cli that implements common shell functions in python.')
 
-    parser.add_argument('message', help='input message to the echoed')
+    parser.add_argument('--echo', '-e', help='input message to the echoed')
 
     return parser
 
@@ -21,8 +21,8 @@ def main():
     """
 
     """
-    from echo import echo_msg
+    from clt import echo
 
     args = create_parser().parse_args()
 
-    echo_msg(args.message)
+    echo.echo_msg(args.echo)

@@ -22,6 +22,11 @@ def create_parser():
     parser.add_argument('--rm',
                         help='remove a file or files'
                         )
+    parser.add_argument('--dir',
+                        choices=['True', 'False'],
+                        help='used with --rm to indicate directory')
+    parser.add_argument('--touch', '-t',
+                        help='make a file')
 
     return parser
 
@@ -39,4 +44,6 @@ def main():
     elif args.echo:
         shell_functions.echo_msg(args.echo)
     elif args.rm:
-        shell_functions.remove_file(args.rm)
+        shell_functions.remove_file(args.rm, args.dir)
+    elif args.touch:
+        shell_functions.touch_file(args.touch)

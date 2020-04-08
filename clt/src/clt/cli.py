@@ -19,6 +19,9 @@ def create_parser():
     parser.add_argument('--mkdir',
                         help='input name of file or path'
                         )
+    parser.add_argument('--rm',
+                        help='remove a file or files'
+                        )
 
     return parser
 
@@ -27,11 +30,13 @@ def main():
     """
 
     """
-    from clt import echo, make_directory
+    from clt import shell_functions
 
     args = create_parser().parse_args()
 
     if args.mkdir:
-        make_directory(args.mkdir)
+        shell_functions.make_directory(args.mkdir)
     elif args.echo:
-        echo.echo_msg(args.echo)
+        shell_functions.echo_msg(args.echo)
+    elif args.rm:
+        shell_functions.remove_file(args.rm)
